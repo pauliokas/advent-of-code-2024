@@ -10,9 +10,6 @@
   "xo": {
     "space": true,
     "prettier": true,
-    "ignores": [
-      "templates/"
-    ],
     "rules": {
       "import/no-anonymous-default-export": "off",
       "unicorn/no-anonymous-default-export": "off"

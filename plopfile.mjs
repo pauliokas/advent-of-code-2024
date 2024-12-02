@@ -88,14 +88,6 @@ export default (plop) => {
         templateFiles: 'templates/*.ts',
         skipIfExists: true,
         data: task,
-        transform: async (contents) =>
-          prettier.format(contents, {
-            parser: 'typescript',
-            singleQuote: true,
-            trailingComma: 'all',
-            printWidth: 120,
-            proseWrap: 'always',
-          }),
       },
     ],
   });

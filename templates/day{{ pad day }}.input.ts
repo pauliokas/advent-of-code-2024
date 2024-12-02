@@ -1,1 +1,3 @@
-export default (input: string): string[] => input.trim().split('\n');
+export type Input = string[];
+
+export default (input: string): Input => input.trim().split('\n');
