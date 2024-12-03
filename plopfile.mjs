@@ -58,7 +58,7 @@ export default (plop) => {
       },
       {
         type: 'add',
-        path: 'src/days/{{ pad day }}/README.md',
+        path: 'src/{{ pad day }}/README.md',
         force: true,
         transform: async () =>
           prettier.format(task.assignment, {
@@ -71,19 +71,19 @@ export default (plop) => {
       },
       {
         type: 'add',
-        path: 'src/days/{{ pad day }}/input.txt',
+        path: 'src/{{ pad day }}/input.txt',
         skipIfExists: true,
         transform: async () => task.input,
       },
       {
         type: 'add',
-        path: 'src/days/{{ pad day }}/input-example.txt',
+        path: 'src/{{ pad day }}/input-example.txt',
         skipIfExists: true,
         transform: async () => task.example,
       },
       {
         type: 'addMany',
-        destination: 'src/days/{{ pad day }}',
+        destination: 'src/{{ pad day }}',
         base: 'templates',
         templateFiles: 'templates/*.ts',
         skipIfExists: true,
