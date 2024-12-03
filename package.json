@@ -51,6 +51,9 @@
     "*.{mjs,mts,js,ts}": [
       "yarn lint --fix"
     ],
+    "src/**/*.test.{mjs,mts,js,ts}": [
+      "node --import=tsx --test"
+    ],
     "*.md": [
       "prettier --write"
     ]
