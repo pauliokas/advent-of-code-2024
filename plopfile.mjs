@@ -46,11 +46,13 @@ export default (plop) => {
     });
   });
 
+  const today = new Date();
+
   plop.setGenerator('day', {
     description: 'generator for a new day in the advent of code',
     prompts: [
-      {type: 'input', name: 'year'},
-      {type: 'input', name: 'day'},
+      {type: 'input', name: 'year', default: today.getFullYear()},
+      {type: 'input', name: 'day', default: today.getDate()},
     ],
     actions: [
       {
