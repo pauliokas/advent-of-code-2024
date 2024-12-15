@@ -3,7 +3,8 @@
   "type": "module",
   "packageManager": "yarn@4.5.1",
   "scripts": {
-    "fetch-day": "plop",
+    "fetch-day": "plop fetch-task",
+    "submit-answer": "plop submit-answer",
     "lint": "xo",
     "test": "node --import=tsx --test 'src/**/*.test.ts'",
     "prepare": "husky"
