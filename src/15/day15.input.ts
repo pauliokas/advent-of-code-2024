@@ -1,32 +1,26 @@
-import {Coords, Dimensions, Direction} from "./grid.js";
+export type Coords = { x: number, y: number };
 
-export type Input = { grid: Record<string, MapObject>, dimensions: Dimensions; robot: Coords, movement: string };
-
-export type Box = 'O';
-export type Wall = '#';
-export type MapObject = Box | Wall;
+export type Movement = '^' | 'v' | '<' | '>';
+export type Input = { grid: string[][]; robot: Coords, movement: Movement[] };
 
 export default (input: string): Input => {
     const [gridStr, movementStr] = input.split('\n\n');
-    const mapData: Record<string, MapObject> = {};
     let robot: Coords | undefined;
 
     const grid = gridStr.split('\n').map((line, y) => line.split(''));
     for (let y = 0; y < grid.length; y++) {
         for (let x = 0; x < grid[y].length; x++) {
-            if (grid[y][x] === '.') continue;
-            if (grid[y][x] === '@') {
+            if (grid[y][x] === '.') grid[y][x] = ' ';
+            else if (grid[y][x] === '@') {
                 robot = {x, y};
-                continue;
+                grid[y][x] = ' ';
             }
-            mapData[`${x},${y}`] = grid[y][x] as MapObject;
         }
     }
 
     return {
-        grid: mapData,
-        dimensions: {width: grid[0].length, height: grid.length},
+        grid: grid,
         robot: robot!,
-        movement: movementStr.split('\n').join('')
+        movement: movementStr.split('\n').flatMap(line => line.split('')) as Movement[],
     };
 };
