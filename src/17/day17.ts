@@ -77,7 +77,6 @@ const runProgram = (registers: Registers, program: number[]): number[] | undefin
         break;
       case Operation.OUT:
         const output = zzz(operand, registers) % 8;
-        if (program[out.length + 1] !== output || out.length + 1 > program.length) return undefined;
         out.push(output);
         break;
     }
@@ -91,11 +90,7 @@ export const solvePart1 = ({registers, program}: Input): string => {
 };
 
 export const solvePart2 = ({registers,program}: Input): number => {
-  const searchString = program.join(',');
-  for (let ax = 0; true; ax+=1) {
-    const out = runProgram({...registers, AX: ax}, program);
-    if (ax % 1000000 === 0) console.log(ax, out?.join(','));
-    if (out?.join(',') === searchString) return ax;
-  }
-  return -1;
+  const out = runProgram(registers, program);
+  console.log(out!.join(','));
+  return 0
 };
