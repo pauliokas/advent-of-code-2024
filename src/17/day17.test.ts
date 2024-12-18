@@ -4,7 +4,8 @@ import {readFileSync} from 'node:fs';
 import parseInput from './day17.input.js';
 import {solvePart1, solvePart2} from './day17.js';
 
-const inputExampleTxt = readFileSync(`${import.meta.dirname}/input-example.txt`, 'utf8');
+const inputExample1Txt = readFileSync(`${import.meta.dirname}/input-example-1.txt`, 'utf8');
+const inputExample2Txt = readFileSync(`${import.meta.dirname}/input-example-2.txt`, 'utf8');
 const inputTxt = readFileSync(`${import.meta.dirname}/input.txt`, 'utf8');
 
 describe('2024-17', () => {
@@ -55,8 +56,8 @@ describe('2024-17', () => {
       assert.equal(registers.BX, 44354);
     });
 
-    it('example', () => {
-      assert.equal(solvePart1(parseInput(inputExampleTxt)), '4,6,3,5,6,3,5,2,1,0');
+    it('example 6', () => {
+      assert.equal(solvePart1(parseInput(inputExample1Txt)), '4,6,3,5,6,3,5,2,1,0');
     });
 
     it('exercise', () => {
@@ -66,7 +67,7 @@ describe('2024-17', () => {
 
   describe('part 2', () => {
     it('example', () => {
-      assert.equal(solvePart2(parseInput(inputExampleTxt)), -1);
+      assert.equal(solvePart2(parseInput(inputExample2Txt)), 117440);
     });
 
     it('exercise', () => {

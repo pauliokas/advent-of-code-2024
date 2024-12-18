@@ -43,7 +43,7 @@ const zzz = (operand: Operand, registers: Registers) => {
   }
 }
 
-export const solvePart1 = ({registers, program}: Input): string => {
+const runProgram = (registers: Registers, program: number[]): number[] | undefined => {
   const out: number[] = [];
 
   let ip = 0;
@@ -76,14 +76,26 @@ export const solvePart1 = ({registers, program}: Input): string => {
         }
         break;
       case Operation.OUT:
-        out.push(zzz(operand, registers) % 8);
+        const output = zzz(operand, registers) % 8;
+        if (program[out.length + 1] !== output || out.length + 1 > program.length) return undefined;
+        out.push(output);
         break;
     }
   }
 
-  return out.join(',');
+  return out;
+}
+
+export const solvePart1 = ({registers, program}: Input): string => {
+  return runProgram(registers, program)?.join(',') ?? '';
 };
 
-export const solvePart2 = (input: Input): string => {
-  return '';
+export const solvePart2 = ({registers,program}: Input): number => {
+  const searchString = program.join(',');
+  for (let ax = 0; true; ax+=1) {
+    const out = runProgram({...registers, AX: ax}, program);
+    if (ax % 1000000 === 0) console.log(ax, out?.join(','));
+    if (out?.join(',') === searchString) return ax;
+  }
+  return -1;
 };
