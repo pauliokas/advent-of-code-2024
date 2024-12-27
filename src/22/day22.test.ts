@@ -4,13 +4,12 @@ import {readFileSync} from 'node:fs';
 import parseInput from './day22.input.js';
 import {solvePart1, solvePart2} from './day22.js';
 
-const inputExampleTxt = readFileSync(`${import.meta.dirname}/input-example.txt`, 'utf8');
 const inputTxt = readFileSync(`${import.meta.dirname}/input.txt`, 'utf8');
 
 describe('2024-22', () => {
   describe('part 1', () => {
     it('example', () => {
-      assert.equal(solvePart1(parseInput(inputExampleTxt)), 37327623);
+      assert.equal(solvePart1([1,10,100,2024]), 37327623);
     });
 
     it('exercise', () => {
@@ -20,11 +19,11 @@ describe('2024-22', () => {
 
   describe('part 2', () => {
     it('example', () => {
-      assert.equal(solvePart2(parseInput(inputExampleTxt)), -1);
+      assert.equal(solvePart2([1,2,3,2024]), 23);
     });
 
     it('exercise', () => {
-      assert.equal(solvePart2(parseInput(inputTxt)), -1);
+      assert.equal(solvePart2(parseInput(inputTxt)), 1710);
     });
   });
 });
