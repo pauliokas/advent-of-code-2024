@@ -9,17 +9,17 @@ const inputTxt = readFileSync(`${import.meta.dirname}/input.txt`, 'utf8');
 describe('2024-22', () => {
   describe('part 1', () => {
     it('example', () => {
-      assert.equal(solvePart1([1,10,100,2024]), 37327623);
+      assert.equal(solvePart1([1, 10, 100, 2024]), 37_327_623);
     });
 
     it('exercise', () => {
-      assert.equal(solvePart1(parseInput(inputTxt)), 15006633487);
+      assert.equal(solvePart1(parseInput(inputTxt)), 15_006_633_487);
     });
   });
 
   describe('part 2', () => {
     it('example', () => {
-      assert.equal(solvePart2([1,2,3,2024]), 23);
+      assert.equal(solvePart2([1, 2, 3, 2024]), 23);
     });
 
     it('exercise', () => {
