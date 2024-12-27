@@ -1,97 +1,97 @@
-import {type Input} from './day21.input.js';
+import {Cell, Coords, Grid} from '../utils/grid.js';
+import {Digit, type Input} from './day21.input.js';
 
 // eslint-disable prettier/prettier
 const KEYBOARDS = {
-  numeric: [
-    '7', '8', '9',
-    '4', '5', '6',
-    '1', '2', '3',
-    ' ', '0', 'A',
-  ] as const,
+  numeric: {
+    grid: Grid.from2dArray([
+      ['7', '8', '9'],
+      ['4', '5', '6'],
+      ['1', '2', '3'],
+      [undefined, '0', 'A'],
+    ] as const),
+    start: {x: 2, y: 3},
+  },
 
-  directional: [
-    ' ', '^', 'A',
-    '<', 'v', '>',
-  ] as const,
+  directional: {
+    grid: Grid.from2dArray([
+      [undefined, '^', 'A'],
+      ['<', 'v', '>'],
+    ] as const),
+    start: {x: 1, y: 0},
+  },
 } as const
 // eslint-enable prettier/prettier
 
-console.log("xxx");
-
-const xxx = (targetCode: string[], targetKeyboard: any): string[] => {
-  let position = targetKeyboard.indexOf('A');
-
-  let sequence: string[] = [];
-  for (const target of targetCode) {
-    const currentX = position % 3;
-    const currentY = Math.floor(position / 3);
-    // console.log('current', currentX, currentY);
-
-    const targetPosition = targetKeyboard.indexOf(target as any);
-
-    const targetX = targetPosition % 3;
-    const targetY = Math.floor(targetPosition / 3);
-    // console.log('target', targetX, targetY);
-
-    const dx = targetX - currentX;
-    const dy = targetY - currentY;
-    // console.log('delta', dx, dy);
-
-    const horizontal = [];
-    for (let i = 0; i < Math.abs(dx); i += 1) {
-      horizontal.push(dx > 0 ? '>' : '<');
-    }
-
-    const vertical = [];
-    for (let i = 0; i < Math.abs(dy); i += 1) {
-      vertical.push(dy > 0 ? 'v' : '^');
-    }
-
-    const asdf = targetKeyboard[currentY * 3 + targetX] === ' ' ? [...vertical, ...horizontal, 'A'] : [...horizontal, ...vertical, 'A'];
-
-    sequence = [...sequence, ...asdf];
-    position = targetPosition;
-  }
-
-  return sequence;
+const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
+  const cache = new Map<string, ReturnType<T>>();
+  return ((...args: Parameters<T>) => {
+    const key = JSON.stringify(args);
+    if (!cache.has(key)) cache.set(key, fn(...args));
+    return cache.get(key)!;
+  }) as T;
 }
 
-const zzz = (targetCode: string[], keyboards: { keyboard: keyof typeof KEYBOARDS, position: number }[]) => {
-  let sequence: string[] = targetCode;
-  for (const {keyboard, position} of keyboards.slice(0, -1)) {
-    sequence = xxx(sequence, KEYBOARDS[keyboard]);
+const convert = (path: Cell<any>[]): string[] => {
+  const buttons: string[] = [];
+  for (let i = 1; i < path.length; i += 1) {
+    const dx = path[i].x - path[i - 1].x;
+    const dy = path[i].y - path[i - 1].y;
+
+    if (dx === -1) buttons.push('<');
+    else if (dx === 1) buttons.push('>');
+    else if (dy === -1) buttons.push('^');
+    else if (dy === 1) buttons.push('v');
+  }
+  return buttons;
+}
+
+const zzz = memoize((keyboardTypes: (keyof typeof KEYBOARDS)[], start: Coords, end: Coords): string[] => {
+  const {grid} = KEYBOARDS[keyboardTypes.at(-1)!];
+  const path = grid.findPath(
+    start,
+    end,
+    (cell, {current}) => {
+      if (keyboardTypes.length === 1) return 0;
+      return zzz(keyboardTypes.slice(0, -1), current, cell).length;
+    }
+  );
+  return [...convert(path), 'A'];
+});
+
+const remap = (keyboardTypes: (keyof typeof KEYBOARDS)[], actualTarget: string[]): string[] => {
+  let target = actualTarget;
+  for (let i = keyboardTypes.length - 1; i >= 0; i -= 1) {
+    const keyboardType = keyboardTypes[i];
+    const {grid, start} = KEYBOARDS[keyboardType];
+
+    let position = grid.at(start);
+    const newTarget: string[] = [];
+    for (let i = 0; i < target.length; i += 1) {
+      const key = target.at(i)!;
+      const targetCell = [...grid].find((cell => cell.value === key))!;
+      // const directPath = grid.findPath(position, targetCell);
+      // newTarget.push(...convert(directPath), 'A');
+      newTarget.push(...zzz(keyboardTypes, position, targetCell));
+      position = targetCell;
+    }
+
+    target = newTarget;
   }
 
-  return sequence;
+  return target;
 }
 
 export const solvePart1 = (input: Input): number => {
+  const keyboards: (keyof typeof KEYBOARDS)[] = [
+    'directional', 'directional', 'numeric'
+  ];
+
   let complexity = 0;
   for (const target of input) {
-    const keyboards: { keyboard: keyof typeof KEYBOARDS, position: number }[] = [
-      {
-        keyboard: 'numeric',
-        position: KEYBOARDS.numeric.indexOf('A'),
-      },
-      {
-        keyboard: 'directional',
-        position: KEYBOARDS.directional.indexOf('A'),
-      },
-      {
-        keyboard: 'directional',
-        position: KEYBOARDS.directional.indexOf('A'),
-      },
-      {
-        keyboard: 'directional',
-        position: KEYBOARDS.directional.indexOf('A'),
-      }
-    ];
-
-    const sequence = zzz(target, keyboards);
-
-    console.log(`${target.join('')}: ${sequence.join('')}`);
-    console.log(sequence.length, parseInt(target.join(''), 10))
-    complexity += sequence.length * parseInt(target.join(''), 10);
+    const result = remap(keyboards, target);
+    console.log(result.join(''));
+    complexity += result.length;
   }
 
   return complexity;
@@ -100,6 +100,3 @@ export const solvePart1 = (input: Input): number => {
 export const solvePart2 = (input: Input): number => {
   return 0;
 };
-
-const iii = { 'a': 1 };
-console.log(iii);

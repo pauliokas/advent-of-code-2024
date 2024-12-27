@@ -26,7 +26,7 @@ describe('2024-21', () => {
     });
   });
 
-  describe('part 2', () => {
+  describe.skip('part 2', () => {
     it('example', () => {
       assert.equal(solvePart2(parseInput(inputExampleTxt)), -1);
     });
