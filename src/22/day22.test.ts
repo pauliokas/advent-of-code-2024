@@ -10,11 +10,11 @@ const inputTxt = readFileSync(`${import.meta.dirname}/input.txt`, 'utf8');
 describe('2024-22', () => {
   describe('part 1', () => {
     it('example', () => {
-      assert.equal(solvePart1(parseInput(inputExampleTxt)), -1);
+      assert.equal(solvePart1(parseInput(inputExampleTxt)), 37327623);
     });
 
     it('exercise', () => {
-      assert.equal(solvePart1(parseInput(inputTxt)), -1);
+      assert.equal(solvePart1(parseInput(inputTxt)), 15006633487);
     });
   });
 
