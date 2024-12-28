@@ -7,26 +7,21 @@ function* limit<T>(limit: number, iterable: Iterable<T>): Generator<T> {
   }
 }
 
-/* eslint-disable no-bitwise */
-
-const mix = (secret: number, value: number) => secret ^ value;
-const prune = (secret: number) => secret & 0xff_ff_ff;
-
 function* generateNumbers(seed: number): Generator<number> {
   let secret = seed;
 
   yield secret;
 
   while (true) {
-    secret = prune(mix(secret, secret << 6));
-    secret = prune(mix(secret, secret >> 5));
-    secret = prune(mix(secret, secret << 11));
+    /* eslint-disable no-bitwise */
+    secret ^= (secret << 6) & 0xff_ff_ff;
+    secret ^= (secret >> 5) & 0xff_ff_ff;
+    secret ^= (secret << 11) & 0xff_ff_ff;
+    /* eslint-enable no-bitwise */
 
     yield secret;
   }
 }
-
-/* eslint-enable no-bitwise */
 
 function* lastDigit(generator: Iterable<number>): Generator<number> {
   for (const value of generator) {
